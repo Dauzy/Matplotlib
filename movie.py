@@ -10,6 +10,7 @@ import zipfile
 import os
 import pandas as pd
 import matplotlib.pyplot as plt
+import numpy as np
 from statistics import mean
 
 
@@ -124,6 +125,7 @@ rated_movies[0:3]
 rated_movies['rating'] = pd.to_numeric(rated_movies['rating'][1:100005])
 rated_movies[rated_movies['rating'] > 4]
 rated_movies[rated_movies['title'] == 'Shawshank Redemption, The (1994)']
+#print(rated_movies)
 
 # rated_movies = rated_movies.pop(0)
 
@@ -144,7 +146,7 @@ top5 = top20[0:5]
 top5_dict = top5.to_dict()
 # We need to get the items (Movies titles)
 top5_items = top5_dict['rating'].items()
-print(top5_dict['rating'])
+#print(top5_dict['rating'])
 # A helper array for stacking the results per movie
 frames = []
 
@@ -159,6 +161,8 @@ result = pd.concat(frames)
 final_variables_array = [top20, top5, result]
 #print(top20.values)
 
+#print(">>>>>>>reuslt ",final_variables_array[0])
+
 # We can get the observations as well
 ratings_by_title = rated_movies.groupby('title').size()
 # Do we need to subset?
@@ -172,9 +176,41 @@ mean_ratings = rated_movies.pivot_table(
 
 # The mean of the hottest movies
 mean_ratings = mean_ratings.ix[hottest_titles]
-#print(mean_ratings)
+#print(">>>>>>>> ",mean_ratings)
 
-plt.plot(top5.values)
+movies5_name = []
+movies5_ratings = []
+text_size = 10
+
+for name, value in top5_items:
+    movies5_name.append(name)
+
+for name, value in top5_items:
+    movies5_ratings.append(value)
+
+print(movies5_name)
+print(movies5_ratings)
+
+values5 = movies5_ratings
+name5 = movies5_name
+pos = np.arange(5)+.5
+
+plt.plot(values5)
+plt.xlabel(movies5_name, fontsize = 8)
+plt.title("Top 5 movies")
+plt.show()
+
+
+principal = plt.barh(pos,values5, align='center')
+plt.yticks(pos, (name5))
+plt.xlabel('ratings')
+plt.title('top 5')
+plt.show()
+
+
+
+"""
+plt.plot()
 plt.ylabel("Score")
 plt.title("Top Movies 5 movies")
 plt.show()
@@ -184,7 +220,7 @@ plt.plot(top20.values)
 plt.ylabel("Score")
 plt.title("Top 20 movies")
 plt.show()
-
+"""
 # For loop for generating the files
 for i in range(3):
     if os.path.isfile(filenames_array[i]):
