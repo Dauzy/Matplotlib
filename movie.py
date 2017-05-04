@@ -196,15 +196,18 @@ name5 = movies5_name
 pos = np.arange(5)+.5
 
 plt.plot(values5)
-plt.xlabel(movies5_name, fontsize = 8)
+plt.xticks(pos,(name5), fontsize= 5)
+#plt.xlabel(movies5_name, fontsize = 8)
 plt.title("Top 5 movies")
+plt.tight_layout()
 plt.show()
 
 
 principal = plt.barh(pos,values5, align='center')
 plt.yticks(pos, (name5))
 plt.xlabel('ratings')
-plt.title('top 5')
+plt.title('top 5 movies')
+plt.tight_layout()
 plt.show()
 
 
