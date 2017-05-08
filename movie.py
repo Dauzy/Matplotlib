@@ -98,7 +98,26 @@ if DEBUG:
 rated_movies = pd.merge(movies, ratings, on='movie_id')
 rated_movies = rated_movies.sort_values('rating', ascending=False)
 
+
+
+#dicount = rated_movies['movie_id'].groupby(rated_movies['title']).count()
+dicount = rated_movies['title'].groupby(rated_movies['title']).count()
+dicrating = rated_movies['title'].groupby(rated_movies['title']).count()
+#print(dicount)
+#print(">>>>>>>> vlas")
+#print(dicrating['title'])
+"""
+for idmov,countt in dicount:
+    moviesid.append(idmov)
+
+for idmov, countt in dicount:
+    moviescount.append(countt)
+""" 
+#print(dicount)
+#print(rated_movies['title'].groupby(rated_movies['title'].count())
+#print(rated_movies[rated_movies['title'] == 'Shawshank Redemption, The (1994)'])
 rated_movies.to_csv(working_dir + 'rated_movies.csv')
+
 
 # Number of movies: 9126
 # Number of evaluations: 100005
@@ -111,6 +130,8 @@ rated_movies.dtypes
 
 # Get summary of your data
 rated_movies.describe()
+#print(rated_movies['movie_id'])
+
 
 # Getting the Transpose
 transposed_movies = rated_movies.T
@@ -125,18 +146,43 @@ rated_movies[0:3]
 rated_movies['rating'] = pd.to_numeric(rated_movies['rating'][1:100005])
 rated_movies[rated_movies['rating'] > 4]
 rated_movies[rated_movies['title'] == 'Shawshank Redemption, The (1994)']
+
 #print(rated_movies)
 
 # rated_movies = rated_movies.pop(0)
 
-# You can aggregate data like this
+#rat = rated_movies.groupby('id')
+#print(rat)
+
+
+# You can aggregate data like this  
 grouped = rated_movies.groupby('title')
+groupcout = rated_movies.groupby('title').count()
+groupedd = rated_movies.groupby('title').mean()
+kgrouped = groupedd.to_dict()['rating']
 group_by_sum = grouped.aggregate(sum)
 group_by_mean = grouped.aggregate(mean)
-# group_by_count = grouped.aggregate(count)
-
+#group_by_count = grouped.aggregate(count)
 # Or the short way
 grouped = rated_movies.groupby('title').sum()
+print(groupcout)
+
+dict1={}
+
+for s in kgrouped.values():
+    s = round(s)
+    if(s.is_integer()):
+        dict1[int(s)] = dict1.get(s, 0) + 1
+
+val=list(dict1.values())
+mx=max(val)
+val_mx = []
+for i in val:
+    val_mx.append(i/mx)
+key=list(dict1.keys())
+
+
+
 
 # Subsetting for our results
 top20 = grouped.sort_values('rating', ascending=False)[0:20]
@@ -149,7 +195,7 @@ top5_items = top5_dict['rating'].items()
 #print(top5_dict['rating'])
 # A helper array for stacking the results per movie
 frames = []
-
+#print(top5_items)
 # A for loop for getting all the results matching a movie
 for name, value in top5_items:
     frames.append(rated_movies[rated_movies['title'] == name])
@@ -160,7 +206,7 @@ result = pd.concat(frames)
 # Helper array for generating target files
 final_variables_array = [top20, top5, result]
 #print(top20.values)
-
+#print(top5)
 #print(">>>>>>>reuslt ",final_variables_array[0])
 
 # We can get the observations as well
@@ -188,42 +234,42 @@ for name, value in top5_items:
 for name, value in top5_items:
     movies5_ratings.append(value)
 
-print(movies5_name)
-print(movies5_ratings)
+#print(movies5_name)
+#print(movies5_ratings)
 
 values5 = movies5_ratings
 name5 = movies5_name
 pos = np.arange(5)+.5
 
-plt.plot(values5)
+
+plt.plot(pos,values5)
 plt.xticks(pos,(name5), fontsize= 5)
+plt.ylabel("Values")
 #plt.xlabel(movies5_name, fontsize = 8)
 plt.title("Top 5 movies")
 plt.tight_layout()
 plt.show()
 
 
-principal = plt.barh(pos,values5, align='center')
-plt.yticks(pos, (name5))
+plt.bar(pos,values5)
+plt.xticks(pos, (name5), fontsize= 5)
 plt.xlabel('ratings')
 plt.title('top 5 movies')
 plt.tight_layout()
 plt.show()
 
+plt.bar(key,val)
+plt.title('ratings mas repetidos')
+plt.xlabel('ratings');
+plt.ylabel('Peliculas');
+plt.show()
 
-
-"""
-plt.plot()
-plt.ylabel("Score")
-plt.title("Top Movies 5 movies")
+bins = np.asarray([0.5,1.5,2.5,3.5,4.5,5.5])
+values = np.asarray(rat.values()) 
+plt.hist(list(rat.values()),bins=bins)
 plt.show()
 
 
-plt.plot(top20.values)
-plt.ylabel("Score")
-plt.title("Top 20 movies")
-plt.show()
-"""
 # For loop for generating the files
 for i in range(3):
     if os.path.isfile(filenames_array[i]):
