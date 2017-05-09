@@ -258,6 +258,14 @@ plt.title('top 5 movies')
 plt.tight_layout()
 plt.show()
 
+plt.barh(pos, values5)
+plt.yticks(pos, (name5))
+plt.xlabel('ratings')
+plt.title('top 5 movies')
+plt.tight_layout()
+plt.show()
+
+
 plt.bar(key,val)
 plt.title('ratings mas repetidos')
 plt.xlabel('ratings');
